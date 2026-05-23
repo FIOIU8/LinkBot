@@ -45,7 +45,6 @@ fun MainApp(
             modifier = Modifier
                 .fillMaxSize()
                 .layerBackdrop(backdrop)
-                .padding(bottom = 88.dp)
         ) {
             AnimatedContent(
                 targetState = selectedTab,
