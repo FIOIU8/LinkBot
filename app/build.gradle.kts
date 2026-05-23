@@ -84,6 +84,8 @@ dependencies {
     implementation("top.yukonga.miuix.kmp:miuix-blur-android:0.9.0")
     implementation("top.yukonga.miuix.kmp:miuix-navigation3-ui:0.9.0")
 
+    implementation("io.github.kyant0:backdrop:1.0.6")
+
     implementation("androidx.datastore:datastore-preferences:1.0.0")
 
     implementation("com.squareup.okhttp3:okhttp:4.12.0")
