@@ -16,6 +16,7 @@ import com.fioiu8.linkbot.ui.screens.*
 import com.fioiu8.linkbot.viewmodel.ChatViewModel
 import com.fioiu8.linkbot.viewmodel.SettingsViewModel
 import com.kyant.backdrop.backdrops.layerBackdrop
+import com.kyant.backdrop.backdrops.rememberCombinedBackdrop
 import com.kyant.backdrop.backdrops.rememberLayerBackdrop
 import com.kyant.backdrop.drawBackdrop
 import com.kyant.backdrop.effects.blur
@@ -98,14 +99,13 @@ fun MainApp(
      * 使用 AndroidLiquidGlass 库实现液态玻璃效果
      */
     val backdrop = rememberLayerBackdrop()
-    
-    // 在 Composable 上下文预先获取颜色值
-    val surfaceColor = MiuixTheme.colorScheme.surface.copy(alpha = 0.5f)
+    val contentBackdrop = rememberLayerBackdrop()
+    val combinedBackdrop = rememberCombinedBackdrop(backdrop, contentBackdrop)
 
     val blurModifier = if (shouldBlur) {
         // 使用 AndroidLiquidGlass 的 drawBackdrop 修饰符实现玻璃效果
         Modifier.drawBackdrop(
-            backdrop = backdrop,
+            backdrop = combinedBackdrop,
             // 设置导航栏顶部圆角形状
             shape = { RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp) },
             // 玻璃效果配置 - 使用官方示例相同参数
@@ -115,7 +115,10 @@ fun MainApp(
                 lens(24f.dp.toPx(), 24f.dp.toPx())
             },
             // 绘制表面层
-            onDrawSurface = { drawRect(surfaceColor) }
+            onDrawSurface = {
+                val surfaceColor = MiuixTheme.colorScheme.surface.copy(alpha = 0.5f)
+                drawRect(surfaceColor)
+            }
         )
     } else Modifier
 
@@ -139,7 +142,7 @@ fun MainApp(
         }
     ) { paddingValues ->
         // 将页面内容绑定到 backdrop，使其内容能被玻璃效果捕获
-        val contentBackdropModifier = if (shouldBlur) Modifier.layerBackdrop(backdrop) else Modifier
+        val contentBackdropModifier = if (shouldBlur) Modifier.layerBackdrop(contentBackdrop) else Modifier
         Box(
             modifier = Modifier
                 .fillMaxSize()
