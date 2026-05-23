@@ -2,6 +2,7 @@ package com.fioiu8.linkbot.ui
 
 import androidx.compose.animation.*
 import androidx.compose.animation.core.tween
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.runtime.*
@@ -37,9 +38,12 @@ fun MainApp(
     )
 
     val backdrop = rememberLayerBackdrop()
+    val backgroundColor = MiuixTheme.colorScheme.background
 
     Box(
-        modifier = Modifier.fillMaxSize()
+        modifier = Modifier
+            .fillMaxSize()
+            .background(backgroundColor)
     ) {
         Box(
             modifier = Modifier
