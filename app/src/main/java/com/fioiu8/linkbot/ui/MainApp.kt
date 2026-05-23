@@ -128,15 +128,15 @@ fun MainApp(
                                     tint = if (selectedTab == index)
                                         MiuixTheme.colorScheme.primary
                                     else
-                                        MiuixTheme.colorScheme.onSurfaceVariant
+                                        MiuixTheme.colorScheme.onSurfaceVariantSummary
                                 )
                                 Text(
                                     text = label,
-                                    style = MiuixTheme.textTheme.caption,
+                                    style = MiuixTheme.textStyles.subtitle,
                                     color = if (selectedTab == index)
                                         MiuixTheme.colorScheme.primary
                                     else
-                                        MiuixTheme.colorScheme.onSurfaceVariant
+                                        MiuixTheme.colorScheme.onSurfaceVariantSummary
                                 )
                             }
                         }
