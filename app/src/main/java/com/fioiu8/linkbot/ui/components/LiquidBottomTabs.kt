@@ -175,12 +175,7 @@ fun LiquidBottomTabs(
                         blur(16f.dp.toPx())
                         lens(32f.dp.toPx(), 32f.dp.toPx())
                     },
-                    layerBlock = {
-                        val progress = dampedDragAnimation.pressProgress
-                        val scale = lerp(1f, 1f + 16f.dp.toPx() / size.width, progress)
-                        scaleX = scale
-                        scaleY = scale
-                    },
+                    layerBlock = {},
                     onDrawSurface = { drawRect(containerColor) }
                 )
                 .then(interactiveHighlight.modifier)
