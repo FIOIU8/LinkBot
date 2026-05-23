@@ -1,7 +1,5 @@
 package com.fioiu8.linkbot.ui
 
-import androidx.compose.animation.*
-import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -49,31 +47,14 @@ fun MainApp(
             modifier = Modifier
                 .fillMaxSize()
                 .layerBackdrop(backdrop)
+                .padding(bottom = 88.dp)
         ) {
-            AnimatedContent(
-                targetState = selectedTab,
-                transitionSpec = {
-                    val direction = if (targetState > initialState) 1 else -1
-                    fadeIn(animationSpec = tween(300)) +
-                    slideInHorizontally(
-                        initialOffsetX = { direction * it / 4 },
-                        animationSpec = tween(300)
-                    ) togetherWith
-                    fadeOut(animationSpec = tween(300)) +
-                    slideOutHorizontally(
-                        targetOffsetX = { -direction * it / 4 },
-                        animationSpec = tween(300)
-                    )
-                },
-                label = "pageTransition"
-            ) { tab ->
-                when (tab) {
-                    0 -> ChatScreen(chatViewModel, settingsViewModel)
-                    1 -> NotesScreen(chatViewModel, settingsViewModel)
-                    2 -> SettingsScreen(chatViewModel, settingsViewModel)
-                    3 -> AboutScreen(settingsViewModel)
-                    else -> ChatScreen(chatViewModel, settingsViewModel)
-                }
+            when (selectedTab) {
+                0 -> ChatScreen(chatViewModel, settingsViewModel)
+                1 -> NotesScreen(chatViewModel, settingsViewModel)
+                2 -> SettingsScreen(chatViewModel, settingsViewModel)
+                3 -> AboutScreen(settingsViewModel)
+                else -> ChatScreen(chatViewModel, settingsViewModel)
             }
         }
 
