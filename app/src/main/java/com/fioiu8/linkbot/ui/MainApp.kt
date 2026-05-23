@@ -97,6 +97,9 @@ fun MainApp(
      * 使用 AndroidLiquidGlass 库实现液态玻璃效果
      */
     val backdrop = rememberLayerBackdrop()
+    
+    // 在 Composable 上下文预先获取颜色值
+    val surfaceColor = MiuixTheme.colorScheme.surface.copy(alpha = 0.5f)
 
     val blurModifier = if (shouldBlur) {
         // 使用 AndroidLiquidGlass 的 drawBackdrop 修饰符实现玻璃效果
@@ -111,15 +114,7 @@ fun MainApp(
                 lens(16f.dp.toPx(), 32f.dp.toPx()) // 透镜变形效果
             },
             // 绘制表面层，提高内容可读性
-            onDrawSurface = { canvas: Canvas ->
-                val paint = android.graphics.Paint().apply {
-                    color = android.graphics.Color.argb((0.5f * 255).toInt(), 
-                        MiuixTheme.colorScheme.surface.red.toInt(),
-                        MiuixTheme.colorScheme.surface.green.toInt(),
-                        MiuixTheme.colorScheme.surface.blue.toInt())
-                }
-                canvas.drawRect(0f, 0f, canvas.width.toFloat(), canvas.height.toFloat(), paint)
-            }
+            onDrawSurface = { drawRect(surfaceColor) }
         )
     } else Modifier
 
