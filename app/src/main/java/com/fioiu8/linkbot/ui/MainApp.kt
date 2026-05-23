@@ -108,13 +108,13 @@ fun MainApp(
             backdrop = backdrop,
             // 设置导航栏顶部圆角形状
             shape = { RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp) },
-            // 玻璃效果配置
+            // 玻璃效果配置 - 使用官方示例相同参数
             effects = {
-                vibrancy()       // 增强色彩饱和度，提升视觉效果
-                blur(4f.dp.toPx()) // 背景模糊效果
-                lens(16f.dp.toPx(), 32f.dp.toPx()) // 透镜变形效果
+                vibrancy()
+                blur(8f.dp.toPx())
+                lens(24f.dp.toPx(), 24f.dp.toPx())
             },
-            // 绘制表面层，提高内容可读性
+            // 绘制表面层
             onDrawSurface = { drawRect(surfaceColor) }
         )
     } else Modifier
