@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
 import com.fioiu8.linkbot.ui.components.LiquidBottomTabs
@@ -37,11 +36,7 @@ fun MainApp(
         MiuixIcons.Info
     )
 
-    val backgroundColor = MiuixTheme.colorScheme.background
-    val backdrop = rememberLayerBackdrop {
-        drawRect(backgroundColor)
-        drawContent()
-    }
+    val backdrop = rememberLayerBackdrop()
 
     Box(
         modifier = Modifier.fillMaxSize()
