@@ -49,12 +49,30 @@ fun MainApp(
                 .layerBackdrop(backdrop)
                 .padding(bottom = 88.dp)
         ) {
-            when (selectedTab) {
-                0 -> ChatScreen(chatViewModel, settingsViewModel)
-                1 -> NotesScreen(chatViewModel, settingsViewModel)
-                2 -> SettingsScreen(chatViewModel, settingsViewModel)
-                3 -> AboutScreen(settingsViewModel)
-                else -> ChatScreen(chatViewModel, settingsViewModel)
+            val chatScreen = remember {
+                @Composable { ChatScreen(chatViewModel, settingsViewModel) }
+            }
+            val notesScreen = remember {
+                @Composable { NotesScreen(chatViewModel, settingsViewModel) }
+            }
+            val settingsScreen = remember {
+                @Composable { SettingsScreen(chatViewModel, settingsViewModel) }
+            }
+            val aboutScreen = remember {
+                @Composable { AboutScreen(settingsViewModel) }
+            }
+
+            val screens = listOf(chatScreen, notesScreen, settingsScreen, aboutScreen)
+            
+            screens.forEachIndexed { index, screen ->
+                Box(
+                    modifier = Modifier.fillMaxSize(),
+                    contentAlignment = Alignment.Center
+                ) {
+                    if (selectedTab == index) {
+                        screen()
+                    }
+                }
             }
         }
 

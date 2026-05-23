@@ -4,7 +4,9 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.lifecycle.viewmodel.viewModelFactory
 import com.fioiu8.linkbot.ui.MainApp
 import com.fioiu8.linkbot.ui.theme.LinkBotTheme
 import com.fioiu8.linkbot.viewmodel.ChatViewModel
@@ -16,7 +18,13 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             val chatViewModel: ChatViewModel = viewModel()
-            val settingsViewModel: SettingsViewModel = viewModel()
+            val settingsViewModel: SettingsViewModel = viewModel(
+                factory = viewModelFactory {
+                    initializer {
+                        SettingsViewModel(applicationContext)
+                    }
+                }
+            )
 
             LinkBotTheme(settingsViewModel = settingsViewModel) {
                 MainApp(
