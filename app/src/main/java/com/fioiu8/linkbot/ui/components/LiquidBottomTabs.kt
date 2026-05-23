@@ -195,7 +195,7 @@ fun LiquidBottomTabs(
                         },
                     contentAlignment = Alignment.Center
                 ) {
-                    content(index)
+                    this@Row.content(index)
                 }
             }
         }
@@ -243,7 +243,7 @@ fun LiquidBottomTabs(
                         modifier = Modifier.weight(1f),
                         contentAlignment = Alignment.Center
                     ) {
-                        content(index)
+                        this@Row.content(index)
                     }
                 }
             }
