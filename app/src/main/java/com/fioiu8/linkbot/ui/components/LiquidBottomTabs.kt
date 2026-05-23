@@ -189,7 +189,10 @@ fun LiquidBottomTabs(
                     modifier = Modifier
                         .weight(1f)
                         .height(64.dp)
-                        .clickable {
+                        .clickable(
+                            indication = null,
+                            interactionSource = remember { androidx.compose.foundation.interaction.MutableInteractionSource() }
+                        ) {
                             currentIndex = index
                             onTabSelected(index)
                         },
