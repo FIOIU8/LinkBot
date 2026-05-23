@@ -1,16 +1,25 @@
 package com.fioiu8.linkbot.ui
 
 import androidx.compose.animation.*
+import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
 import com.fioiu8.linkbot.ui.screens.*
 import com.fioiu8.linkbot.viewmodel.ChatViewModel
 import com.fioiu8.linkbot.viewmodel.SettingsViewModel
+import com.kyant.backdrop.backdrops.layerBackdrop
+import com.kyant.backdrop.backdrops.rememberLayerBackdrop
+import com.kyant.backdrop.drawBackdrop
+import com.kyant.backdrop.effects.blur
+import com.kyant.backdrop.effects.lens
+import com.kyant.backdrop.effects.vibrancy
 import top.yukonga.miuix.kmp.basic.*
 import top.yukonga.miuix.kmp.icon.MiuixIcons
 import top.yukonga.miuix.kmp.icon.extended.*
@@ -39,10 +48,10 @@ fun MainApp(
     // ==================== 状态收集 ====================
     /** 当前选中的标签页索引 */
     val selectedTab by settingsViewModel.selectedTab.collectAsState()
-    
+
     /** 是否启用毛玻璃效果 */
     val blurEnabled by settingsViewModel.blurEnabled.collectAsState()
-    
+
     /** 聊天消息列表（用于判断是否显示毛玻璃） */
     val messages by chatViewModel.messages.collectAsState()
 
@@ -81,26 +90,65 @@ fun MainApp(
         MiuixIcons.Info
     )
 
+    // ==================== AndroidLiquidGlass 玻璃效果 ====================
+    /**
+     * 创建背景层，用于捕获底层内容并应用玻璃效果
+     * 使用 AndroidLiquidGlass 库实现液态玻璃效果
+     */
+    val backdrop = rememberLayerBackdrop()
+
     // ==================== 主布局 ====================
     Scaffold(
         bottomBar = {
-            NavigationBarContainer(
-                selectedTab = selectedTab,
-                onTabSelected = { settingsViewModel.selectTab(it) },
-                titles = pageTitles,
-                icons = pageIcons,
-                backgroundColor = navBarColor,
-                shadowElevation = navBarShadow
-            )
+            Box(
+                Modifier
+                    .fillMaxWidth()
+                    // 根据配置条件性应用玻璃效果
+                    .then(
+                        if (shouldBlur) {
+                            // 使用 AndroidLiquidGlass 的 drawBackdrop 修饰符实现玻璃效果
+                            Modifier.drawBackdrop(
+                                backdrop = backdrop,
+                                // 设置导航栏顶部圆角形状
+                                shape = { RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp) },
+                                // 玻璃效果配置
+                                effects = {
+                                    vibrancy()       // 增强色彩饱和度，提升视觉效果
+                                    blur(4f.dp.toPx()) // 背景模糊效果
+                                    lens(16f.dp.toPx(), 32f.dp.toPx()) // 透镜变形效果
+                                },
+                                // 绘制表面层，提高内容可读性
+                                onDrawSurface = { drawRect(MiuixTheme.colorScheme.surface.copy(alpha = 0.5f)) }
+                            )
+                        } else Modifier
+                    )
+            ) {
+                NavigationBarContainer(
+                    selectedTab = selectedTab,
+                    onTabSelected = { settingsViewModel.selectTab(it) },
+                    titles = pageTitles,
+                    icons = pageIcons,
+                    backgroundColor = navBarColor,
+                    shadowElevation = navBarShadow
+                )
+            }
         }
     ) { paddingValues ->
-        // 页面内容区域
-        PageContent(
-            selectedTab = selectedTab,
-            chatViewModel = chatViewModel,
-            settingsViewModel = settingsViewModel,
-            paddingValues = paddingValues
-        )
+        // 将页面内容绑定到 backdrop，使其内容能被玻璃效果捕获
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .then(
+                    if (shouldBlur) Modifier.layerBackdrop(backdrop) else Modifier
+                )
+        ) {
+            PageContent(
+                selectedTab = selectedTab,
+                chatViewModel = chatViewModel,
+                settingsViewModel = settingsViewModel,
+                paddingValues = paddingValues
+            )
+        }
     }
 }
 

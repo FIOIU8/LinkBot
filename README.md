@@ -27,6 +27,7 @@
 - **语言**: Kotlin
 - **UI框架**: Jetpack Compose
 - **组件库**: Miuix KMP
+- **玻璃效果**: AndroidLiquidGlass (Backdrop)
 - **网络**: OkHttp + Gson
 - **图片加载**: Coil
 - **数据存储**: AndroidX Datastore
