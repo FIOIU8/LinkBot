@@ -1,0 +1,16 @@
+# Kotlin 编译缓存
+.kotlin/
+
+# Android 构建输出
+build/
+.gradle/
+*.apk
+*.aar
+
+# IDE 配置（可选，取决于是否共享）
+.idea/
+*.iml
+.DS_Store
+
+# 本地配置文件
+local.properties
