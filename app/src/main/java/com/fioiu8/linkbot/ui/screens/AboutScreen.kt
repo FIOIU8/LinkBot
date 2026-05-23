@@ -265,8 +265,8 @@ import java.util.*
                 ) {
                     Column(modifier = Modifier.padding(8.dp)) {
                         SwitchPreference(
-                            title = "毛玻璃效果",
-                            summary = if (blurEnabled) "已启用导航栏毛玻璃效果" else "导航栏使用普通样式",
+                            title = "AndroidLiquidGlass",
+                            summary = if (blurEnabled) "液态玻璃效果已启用，可实现惊人的视觉效果" else "使用普通导航栏样式",
                             checked = blurEnabled,
                             onCheckedChange = { settingsViewModel.setBlurEnabled(it) }
                         )
