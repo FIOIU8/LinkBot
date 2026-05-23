@@ -3,6 +3,7 @@ package com.fioiu8.linkbot.ui.components
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.EaseOut
 import androidx.compose.animation.core.spring
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
@@ -66,7 +67,7 @@ fun LiquidBottomTabs(
     backdrop: Backdrop,
     tabsCount: Int,
     modifier: Modifier = Modifier,
-    content: @Composable RowScope.() -> Unit
+    content: @Composable RowScope.(index: Int) -> Unit
 ) {
     val isLightTheme = !isSystemInDarkTheme()
     val accentColor =
@@ -186,9 +187,23 @@ fun LiquidBottomTabs(
                 .height(64f.dp)
                 .fillMaxWidth()
                 .padding(4f.dp),
-            verticalAlignment = Alignment.CenterVertically,
-            content = content
-        )
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            repeat(tabsCount) { index ->
+                Box(
+                    modifier = Modifier
+                        .weight(1f)
+                        .height(64.dp)
+                        .clickable {
+                            currentIndex = index
+                            onTabSelected(index)
+                        },
+                    contentAlignment = Alignment.Center
+                ) {
+                    content(index)
+                }
+            }
+        }
 
         CompositionLocalProvider(
             LocalLiquidBottomTabScale provides {
@@ -226,9 +241,17 @@ fun LiquidBottomTabs(
                     .fillMaxWidth()
                     .padding(horizontal = 4f.dp)
                     .graphicsLayer(colorFilter = ColorFilter.tint(accentColor)),
-                verticalAlignment = Alignment.CenterVertically,
-                content = content
-            )
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                repeat(tabsCount) { index ->
+                    Box(
+                        modifier = Modifier.weight(1f),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        content(index)
+                    }
+                }
+            }
         }
 
         Box(

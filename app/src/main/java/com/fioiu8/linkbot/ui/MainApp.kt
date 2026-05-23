@@ -84,18 +84,16 @@ fun MainApp(
                     .align(Alignment.BottomCenter)
                     .padding(horizontal = 16.dp, vertical = 16.dp)
                     .navigationBarsPadding()
-            ) {
-                pageTitles.forEachIndexed { index, label ->
-                    Box(
-                        modifier = Modifier.weight(1f),
-                        contentAlignment = Alignment.Center
-                    ) {
-                        Icon(
-                            imageVector = pageIcons[index],
-                            contentDescription = label,
-                            modifier = Modifier.padding(bottom = 4.dp)
-                        )
-                    }
+            ) { index ->
+                Box(
+                    modifier = Modifier.weight(1f),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Icon(
+                        imageVector = pageIcons[index],
+                        contentDescription = pageTitles[index],
+                        modifier = Modifier.padding(bottom = 4.dp)
+                    )
                 }
             }
         } else {
