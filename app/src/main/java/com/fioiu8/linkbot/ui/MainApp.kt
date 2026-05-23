@@ -101,6 +101,9 @@ fun MainApp(
     val backdrop = rememberLayerBackdrop()
     val contentBackdrop = rememberLayerBackdrop()
     val combinedBackdrop = rememberCombinedBackdrop(backdrop, contentBackdrop)
+    
+    // 在 Composable 上下文预先获取颜色值
+    val surfaceColor = MiuixTheme.colorScheme.surface.copy(alpha = 0.5f)
 
     val blurModifier = if (shouldBlur) {
         // 使用 AndroidLiquidGlass 的 drawBackdrop 修饰符实现玻璃效果
@@ -115,10 +118,7 @@ fun MainApp(
                 lens(24f.dp.toPx(), 24f.dp.toPx())
             },
             // 绘制表面层
-            onDrawSurface = {
-                val surfaceColor = MiuixTheme.colorScheme.surface.copy(alpha = 0.5f)
-                drawRect(surfaceColor)
-            }
+            onDrawSurface = { drawRect(surfaceColor) }
         )
     } else Modifier
 
