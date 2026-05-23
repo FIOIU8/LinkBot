@@ -2,6 +2,7 @@ package com.fioiu8.linkbot.ui
 
 import androidx.compose.animation.*
 import androidx.compose.animation.core.tween
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -17,6 +18,7 @@ import com.kyant.backdrop.backdrops.rememberLayerBackdrop
 import top.yukonga.miuix.kmp.basic.*
 import top.yukonga.miuix.kmp.icon.MiuixIcons
 import top.yukonga.miuix.kmp.icon.extended.*
+import top.yukonga.miuix.kmp.theme.MiuixTheme
 
 @Composable
 fun MainApp(
@@ -101,7 +103,7 @@ fun MainApp(
                     .align(Alignment.BottomCenter)
                     .fillMaxWidth()
                     .navigationBarsPadding(),
-                color = top.yukonga.miuix.kmp.theme.MiuixTheme.colorScheme.surface
+                color = MiuixTheme.colorScheme.surface
             ) {
                 Row(
                     modifier = Modifier
@@ -124,17 +126,17 @@ fun MainApp(
                                     imageVector = pageIcons[index],
                                     contentDescription = label,
                                     tint = if (selectedTab == index)
-                                        top.yukonga.miuix.kmp.theme.MiuixTheme.colorScheme.primary
+                                        MiuixTheme.colorScheme.primary
                                     else
-                                        top.yukonga.miuix.kmp.theme.MiuixTheme.colorScheme.onSurfaceVariant
+                                        MiuixTheme.colorScheme.onSurfaceVariant
                                 )
                                 Text(
                                     text = label,
-                                    style = top.yukonga.miuix.kmp.theme.MiuixTheme.textTheme.caption,
+                                    style = MiuixTheme.textTheme.caption,
                                     color = if (selectedTab == index)
-                                        top.yukonga.miuix.kmp.theme.MiuixTheme.colorScheme.primary
+                                        MiuixTheme.colorScheme.primary
                                     else
-                                        top.yukonga.miuix.kmp.theme.MiuixTheme.colorScheme.onSurfaceVariant
+                                        MiuixTheme.colorScheme.onSurfaceVariant
                                 )
                             }
                         }
