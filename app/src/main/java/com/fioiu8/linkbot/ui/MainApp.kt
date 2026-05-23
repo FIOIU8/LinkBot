@@ -58,7 +58,8 @@ fun MainApp(
 
     // ==================== 毛玻璃效果判断 ====================
     /** 是否应该显示毛玻璃效果（聊天页面有消息时） */
-    val shouldBlur = blurEnabled && selectedTab == 0 && messages.isNotEmpty()
+    // TODO: 调试用，临时简化条件。正式使用时改为: val shouldBlur = blurEnabled && selectedTab == 0 && messages.isNotEmpty()
+    val shouldBlur = blurEnabled
 
     // ==================== 导航栏动画状态 ====================
     /** 导航栏背景颜色（带动画过渡） */
