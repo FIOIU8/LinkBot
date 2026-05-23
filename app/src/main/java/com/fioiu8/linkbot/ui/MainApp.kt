@@ -1,5 +1,6 @@
 package com.fioiu8.linkbot.ui
 
+import android.graphics.Canvas
 import androidx.compose.animation.*
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.animateDpAsState
@@ -110,7 +111,15 @@ fun MainApp(
                 lens(16f.dp.toPx(), 32f.dp.toPx()) // 透镜变形效果
             },
             // 绘制表面层，提高内容可读性
-            onDrawSurface = { drawRect(MiuixTheme.colorScheme.surface.copy(alpha = 0.5f)) }
+            onDrawSurface = { canvas: Canvas ->
+                val paint = android.graphics.Paint().apply {
+                    color = android.graphics.Color.argb((0.5f * 255).toInt(), 
+                        MiuixTheme.colorScheme.surface.red.toInt(),
+                        MiuixTheme.colorScheme.surface.green.toInt(),
+                        MiuixTheme.colorScheme.surface.blue.toInt())
+                }
+                canvas.drawRect(0f, 0f, canvas.width.toFloat(), canvas.height.toFloat(), paint)
+            }
         )
     } else Modifier
 
