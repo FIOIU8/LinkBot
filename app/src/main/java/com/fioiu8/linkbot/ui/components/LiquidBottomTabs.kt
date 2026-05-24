@@ -5,6 +5,7 @@ import androidx.compose.animation.core.EaseOut
 import androidx.compose.animation.core.spring
 import androidx.compose.foundation.gestures.awaitEachGesture
 import androidx.compose.foundation.gestures.awaitFirstDown
+import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
@@ -13,6 +14,7 @@ import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
@@ -222,10 +224,9 @@ fun LiquidBottomTabs(
                             if (hasDragged) {
                                 val frameDragAmount = currentPosition - previousPosition
                                 previousPosition = currentPosition
-                                val size = IntSize(width, height)
-                                dampedDragAnimation.onDrag.invoke(size, frameDragAmount)
+                                dampedDragAnimation.onDrag(containerSize, frameDragAmount)
                             }
-                        } while (down.changedToUp().not())
+                        } while (change.isPressed)
 
                         dampedDragAnimation.release()
 
