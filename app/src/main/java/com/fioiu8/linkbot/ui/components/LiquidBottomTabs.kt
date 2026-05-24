@@ -194,19 +194,18 @@ fun LiquidBottomTabs(
                 .height(64f.dp)
                 .fillMaxWidth()
                 .padding(4f.dp)
-                .pointerInput(tabsCount, tabWidth) {
-                    var hasDragged = false
+                .pointerInput(tabsCount) {
+                    var totalDragAmount = Offset.Zero
+                    var hasMovedBeyondThreshold = false
                     var startPosition = Offset.Zero
 
                     awaitEachGesture {
+                        startPosition = awaitFirstDown().position
+                        totalDragAmount = Offset.Zero
+                        hasMovedBeyondThreshold = false
+
                         val down = awaitFirstDown()
-
-                        hasDragged = false
-                        startPosition = down.position
-
                         dampedDragAnimation.press()
-
-                        var previousPosition = down.position
 
                         do {
                             val event = awaitPointerEvent()
@@ -215,22 +214,23 @@ fun LiquidBottomTabs(
                             if (change.isConsumed) break
 
                             val currentPosition = change.position
-                            val dragAmount = currentPosition - startPosition
+                            val dragSinceStart = currentPosition - startPosition
 
-                            if (!hasDragged && (abs(dragAmount.x) > TapThreshold || abs(dragAmount.y) > TapThreshold)) {
-                                hasDragged = true
+                            if (!hasMovedBeyondThreshold &&
+                                (abs(dragSinceStart.x) > TapThreshold || abs(dragSinceStart.y) > TapThreshold)) {
+                                hasMovedBeyondThreshold = true
                             }
 
-                            if (hasDragged) {
-                                val frameDragAmount = currentPosition - previousPosition
-                                previousPosition = currentPosition
-                                dampedDragAnimation.onDrag(dampedDragAnimation, containerSize, frameDragAmount)
+                            if (hasMovedBeyondThreshold) {
+                                val frameDelta = currentPosition - (startPosition + totalDragAmount)
+                                totalDragAmount += frameDelta
+                                dampedDragAnimation.onDrag(dampedDragAnimation, containerSize, frameDelta)
                             }
                         } while (event.changes.any { it.pressed })
 
                         dampedDragAnimation.release()
 
-                        if (!hasDragged) {
+                        if (!hasMovedBeyondThreshold) {
                             val tappedIndex = when {
                                 isLtr -> ((startPosition.x) / tabWidth).fastRoundToInt()
                                 else -> (tabsCount - 1) - ((startPosition.x) / tabWidth).fastRoundToInt()

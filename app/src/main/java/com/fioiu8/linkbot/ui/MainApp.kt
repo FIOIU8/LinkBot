@@ -44,9 +44,12 @@ fun MainApp(
         Box(
             modifier = Modifier
                 .fillMaxSize()
-                .layerBackdrop(backdrop)
                 .then(
-                    if (blurEnabled) Modifier.padding(bottom = 88.dp)
+                    if (blurEnabled) Modifier.layerBackdrop(backdrop)
+                    else Modifier
+                )
+                .then(
+                    if (!blurEnabled) Modifier.padding(bottom = 80.dp)
                     else Modifier
                 )
         ) {
