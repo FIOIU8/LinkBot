@@ -20,7 +20,7 @@ class MainActivity : ComponentActivity() {
             val chatViewModel: ChatViewModel = viewModel()
             val settingsViewModel: SettingsViewModel = viewModel(
                 factory = viewModelFactory {
-                    initializer {
+                    addInitializer(SettingsViewModel::class) {
                         SettingsViewModel(applicationContext)
                     }
                 }

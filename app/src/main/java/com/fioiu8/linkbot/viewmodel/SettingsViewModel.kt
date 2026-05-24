@@ -151,7 +151,12 @@ class SettingsViewModel(private val context: Context) : ViewModel() {
     }
 
     private fun longToColor(longValue: Long): Color {
-        val color = android.graphics.Color.valueOf(longValue.toFloat())
-        return Color(color.red(), color.green(), color.blue(), color.alpha())
+        val colorInt = longValue.toInt()
+        return Color(
+            alpha = android.graphics.Color.alpha(colorInt) / 255f,
+            red = android.graphics.Color.red(colorInt) / 255f,
+            green = android.graphics.Color.green(colorInt) / 255f,
+            blue = android.graphics.Color.blue(colorInt) / 255f
+        )
     }
 }
