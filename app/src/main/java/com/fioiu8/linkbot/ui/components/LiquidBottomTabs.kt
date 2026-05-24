@@ -224,9 +224,9 @@ fun LiquidBottomTabs(
                             if (hasDragged) {
                                 val frameDragAmount = currentPosition - previousPosition
                                 previousPosition = currentPosition
-                                dampedDragAnimation.onDrag(containerSize, frameDragAmount)
+                                dampedDragAnimation.onDrag(dampedDragAnimation, containerSize, frameDragAmount)
                             }
-                        } while (change.isPressed)
+                        } while (event.changes.any { it.pressed })
 
                         dampedDragAnimation.release()
 
