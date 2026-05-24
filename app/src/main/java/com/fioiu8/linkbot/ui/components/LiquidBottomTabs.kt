@@ -5,7 +5,6 @@ import androidx.compose.animation.core.EaseOut
 import androidx.compose.animation.core.spring
 import androidx.compose.foundation.gestures.awaitEachGesture
 import androidx.compose.foundation.gestures.awaitFirstDown
-import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
@@ -195,51 +194,52 @@ fun LiquidBottomTabs(
                 .fillMaxWidth()
                 .padding(4f.dp)
                 .pointerInput(tabsCount) {
-                    var totalDragAmount = Offset.Zero
-                    var hasMovedBeyondThreshold = false
-                    var startPosition = Offset.Zero
+                    var hasDragged = false
+                    var initialPressPosition = Offset.Zero
 
                     awaitEachGesture {
-                        startPosition = awaitFirstDown().position
-                        totalDragAmount = Offset.Zero
-                        hasMovedBeyondThreshold = false
+                        val firstDown = awaitFirstDown()
+                        initialPressPosition = firstDown.position
+                        hasDragged = false
 
-                        val down = awaitFirstDown()
                         dampedDragAnimation.press()
+
+                        var lastPosition = initialPressPosition
 
                         do {
                             val event = awaitPointerEvent()
                             val change = event.changes.firstOrNull() ?: break
 
-                            if (change.isConsumed) break
-
-                            val currentPosition = change.position
-                            val dragSinceStart = currentPosition - startPosition
-
-                            if (!hasMovedBeyondThreshold &&
-                                (abs(dragSinceStart.x) > TapThreshold || abs(dragSinceStart.y) > TapThreshold)) {
-                                hasMovedBeyondThreshold = true
+                            if (change.isConsumed) {
+                                break
                             }
 
-                            if (hasMovedBeyondThreshold) {
-                                val frameDelta = currentPosition - (startPosition + totalDragAmount)
-                                totalDragAmount += frameDelta
+                            val currentPosition = change.position
+                            val dragDistance = currentPosition - initialPressPosition
+
+                            if (!hasDragged) {
+                                if (abs(dragDistance.x) > TapThreshold || abs(dragDistance.y) > TapThreshold) {
+                                    hasDragged = true
+                                }
+                            }
+
+                            if (hasDragged) {
+                                val frameDelta = currentPosition - lastPosition
+                                lastPosition = currentPosition
                                 dampedDragAnimation.onDrag(dampedDragAnimation, containerSize, frameDelta)
                             }
                         } while (event.changes.any { it.pressed })
 
                         dampedDragAnimation.release()
 
-                        if (!hasMovedBeyondThreshold) {
+                        if (!hasDragged) {
                             val tappedIndex = when {
-                                isLtr -> ((startPosition.x) / tabWidth).fastRoundToInt()
-                                else -> (tabsCount - 1) - ((startPosition.x) / tabWidth).fastRoundToInt()
+                                isLtr -> (initialPressPosition.x / tabWidth).fastRoundToInt()
+                                else -> (tabsCount - 1) - (initialPressPosition.x / tabWidth).fastRoundToInt()
                             }
                             val clampedIndex = tappedIndex.fastCoerceIn(0, tabsCount - 1)
-                            if (clampedIndex != currentIndex) {
-                                currentIndex = clampedIndex
-                                onTabSelected(clampedIndex)
-                            }
+                            currentIndex = clampedIndex
+                            onTabSelected(clampedIndex)
                         }
                     }
                 },
