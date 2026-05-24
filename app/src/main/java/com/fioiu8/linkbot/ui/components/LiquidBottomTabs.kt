@@ -230,16 +230,23 @@ fun LiquidBottomTabs(
                             }
                         } while (event.changes.any { it.pressed })
 
-                        dampedDragAnimation.release()
-
-                        if (!hasDragged) {
+                        if (hasDragged) {
+                            dampedDragAnimation.release()
+                        } else {
                             val tappedIndex = when {
                                 isLtr -> (initialPressPosition.x / tabWidth).fastRoundToInt()
                                 else -> (tabsCount - 1) - (initialPressPosition.x / tabWidth).fastRoundToInt()
                             }
                             val clampedIndex = tappedIndex.fastCoerceIn(0, tabsCount - 1)
-                            currentIndex = clampedIndex
-                            onTabSelected(clampedIndex)
+                            if (clampedIndex != currentIndex) {
+                                currentIndex = clampedIndex
+                                dampedDragAnimation.snapToValue(clampedIndex.toFloat())
+                                animationScope.launch {
+                                    offsetAnimation.snapTo(0f)
+                                }
+                                onTabSelected(clampedIndex)
+                            }
+                            dampedDragAnimation.release()
                         }
                     }
                 },
