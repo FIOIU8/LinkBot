@@ -6,7 +6,6 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
 import com.fioiu8.linkbot.ui.components.LiquidBottomTabs
 import com.fioiu8.linkbot.ui.screens.*
@@ -47,7 +46,10 @@ fun MainApp(
             modifier = Modifier
                 .fillMaxSize()
                 .layerBackdrop(backdrop)
-                .padding(bottom = 88.dp)
+                .then(
+                    if (blurEnabled) Modifier.padding(bottom = 88.dp)
+                    else Modifier
+                )
         ) {
             val chatScreen = remember {
                 @Composable { ChatScreen(chatViewModel, settingsViewModel) }
@@ -63,7 +65,7 @@ fun MainApp(
             }
 
             val screens = listOf(chatScreen, notesScreen, settingsScreen, aboutScreen)
-            
+
             screens.forEachIndexed { index, screen ->
                 Box(
                     modifier = Modifier.fillMaxSize(),
@@ -88,60 +90,38 @@ fun MainApp(
                     .navigationBarsPadding()
             ) { index ->
                 Box(
-                    modifier = Modifier.weight(1f),
+                    modifier = Modifier.fillMaxSize(),
                     contentAlignment = Alignment.Center
                 ) {
                     Icon(
                         imageVector = pageIcons[index],
                         contentDescription = pageTitles[index],
-                        modifier = Modifier.padding(bottom = 4.dp)
+                        modifier = Modifier
                     )
                 }
             }
         } else {
-            Surface(
+            NavigationBar(
                 modifier = Modifier
                     .align(Alignment.BottomCenter)
                     .fillMaxWidth()
-                    .navigationBarsPadding(),
-                color = MiuixTheme.colorScheme.surface
+                    .navigationBarsPadding()
+                    .padding(horizontal = 8.dp, vertical = 8.dp)
             ) {
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(56.dp),
-                    horizontalArrangement = Arrangement.SpaceEvenly
-                ) {
-                    pageTitles.forEachIndexed { index, label ->
-                        Box(
-                            modifier = Modifier
-                                .weight(1f)
-                                .fillMaxHeight()
-                                .clickable { settingsViewModel.selectTab(index) },
-                            contentAlignment = Alignment.Center
-                        ) {
-                            Column(
-                                horizontalAlignment = Alignment.CenterHorizontally
-                            ) {
-                                Icon(
-                                    imageVector = pageIcons[index],
-                                    contentDescription = label,
-                                    tint = if (selectedTab == index)
-                                        MiuixTheme.colorScheme.primary
-                                    else
-                                        MiuixTheme.colorScheme.onSurfaceVariantSummary
-                                )
-                                Text(
-                                    text = label,
-                                    style = MiuixTheme.textStyles.subtitle,
-                                    color = if (selectedTab == index)
-                                        MiuixTheme.colorScheme.primary
-                                    else
-                                        MiuixTheme.colorScheme.onSurfaceVariantSummary
-                                )
-                            }
+                pageTitles.forEachIndexed { index, label ->
+                    NavigationBarItem(
+                        selected = selectedTab == index,
+                        onClick = { settingsViewModel.selectTab(index) },
+                        icon = {
+                            Icon(
+                                imageVector = pageIcons[index],
+                                contentDescription = label
+                            )
+                        },
+                        label = {
+                            Text(text = label)
                         }
-                    }
+                    )
                 }
             }
         }

@@ -3,7 +3,8 @@ package com.fioiu8.linkbot.ui.components
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.EaseOut
 import androidx.compose.animation.core.spring
-import androidx.compose.foundation.clickable
+import androidx.compose.foundation.gestures.awaitEachGesture
+import androidx.compose.foundation.gestures.awaitFirstDown
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
@@ -18,6 +19,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
@@ -30,6 +32,8 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.semantics.clearAndSetSemantics
@@ -59,6 +63,8 @@ import kotlin.math.abs
 import kotlin.math.sign
 
 private val LocalLiquidBottomTabScale = staticCompositionLocalOf { { 1f } }
+
+private val TapThreshold = 10f
 
 @Composable
 fun LiquidBottomTabs(
@@ -103,6 +109,9 @@ fun LiquidBottomTabs(
         var currentIndex by remember(selectedTabIndex) {
             mutableIntStateOf(selectedTabIndex())
         }
+
+        var containerSize by remember { mutableStateOf(Offset.Zero) }
+
         val dampedDragAnimation = remember(animationScope) {
             DampedDragAnimation(
                 animationScope = animationScope,
@@ -164,6 +173,7 @@ fun LiquidBottomTabs(
 
         Row(
             Modifier
+                .onSizeChanged { containerSize = Offset(it.toFloat(), it.toFloat()) }
                 .graphicsLayer {
                     translationX = panelOffset
                 }
@@ -181,21 +191,64 @@ fun LiquidBottomTabs(
                 .then(interactiveHighlight.modifier)
                 .height(64f.dp)
                 .fillMaxWidth()
-                .padding(4f.dp),
+                .padding(4f.dp)
+                .pointerInput(tabsCount, tabWidth) {
+                    var hasDragged = false
+                    var startPosition = Offset.Zero
+
+                    awaitEachGesture {
+                        val down = awaitFirstDown()
+
+                        hasDragged = false
+                        startPosition = down.position
+
+                        dampedDragAnimation.press()
+
+                        var dragAmount = Offset.Zero
+                        var previousPosition = down.position
+
+                        while (down.changedToUp().not()) {
+                            val event = awaitPointerEvent()
+                            val change = event.changes.firstOrNull() ?: break
+
+                            if (change.isConsumed) break
+
+                            val currentPosition = change.position
+                            dragAmount = currentPosition - startPosition
+
+                            if (!hasDragged && (abs(dragAmount.x) > TapThreshold || abs(dragAmount.y) > TapThreshold)) {
+                                hasDragged = true
+                            }
+
+                            if (hasDragged) {
+                                val frameDragAmount = currentPosition - previousPosition
+                                previousPosition = currentPosition
+                                dampedDragAnimation.onDrag(size, frameDragAmount)
+                            }
+                        }
+
+                        dampedDragAnimation.release()
+
+                        if (!hasDragged) {
+                            val tappedIndex = when {
+                                isLtr -> ((startPosition.x) / tabWidth).fastRoundToInt()
+                                else -> (tabsCount - 1) - ((startPosition.x) / tabWidth).fastRoundToInt()
+                            }
+                            val clampedIndex = tappedIndex.fastCoerceIn(0, tabsCount - 1)
+                            if (clampedIndex != currentIndex) {
+                                currentIndex = clampedIndex
+                                onTabSelected(clampedIndex)
+                            }
+                        }
+                    }
+                },
             verticalAlignment = Alignment.CenterVertically
         ) {
             repeat(tabsCount) { index ->
                 Box(
                     modifier = Modifier
                         .weight(1f)
-                        .height(64.dp)
-                        .clickable(
-                            indication = null,
-                            interactionSource = remember { androidx.compose.foundation.interaction.MutableInteractionSource() }
-                        ) {
-                            currentIndex = index
-                            onTabSelected(index)
-                        },
+                        .height(64.dp),
                     contentAlignment = Alignment.Center
                 ) {
                     this@Row.content(index)
