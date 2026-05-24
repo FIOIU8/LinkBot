@@ -37,6 +37,7 @@ import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.semantics.clearAndSetSemantics
+import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.util.fastCoerceIn
@@ -110,7 +111,7 @@ fun LiquidBottomTabs(
             mutableIntStateOf(selectedTabIndex())
         }
 
-        var containerSize by remember { mutableStateOf(Offset.Zero) }
+        var containerSize by remember { mutableStateOf(IntSize.Zero) }
 
         val dampedDragAnimation = remember(animationScope) {
             DampedDragAnimation(
@@ -173,7 +174,7 @@ fun LiquidBottomTabs(
 
         Row(
             Modifier
-                .onSizeChanged { containerSize = Offset(it.toFloat(), it.toFloat()) }
+                .onSizeChanged { containerSize = it }
                 .graphicsLayer {
                     translationX = panelOffset
                 }
@@ -204,17 +205,20 @@ fun LiquidBottomTabs(
 
                         dampedDragAnimation.press()
 
-                        var dragAmount = Offset.Zero
                         var previousPosition = down.position
 
-                        while (down.changedToUp().not()) {
+                        val isUp = {
+                            currentEvent.changes.any { it.pressed }
+                        }
+
+                        while (isUp()) {
                             val event = awaitPointerEvent()
                             val change = event.changes.firstOrNull() ?: break
 
                             if (change.isConsumed) break
 
                             val currentPosition = change.position
-                            dragAmount = currentPosition - startPosition
+                            val dragAmount = currentPosition - startPosition
 
                             if (!hasDragged && (abs(dragAmount.x) > TapThreshold || abs(dragAmount.y) > TapThreshold)) {
                                 hasDragged = true
@@ -223,7 +227,7 @@ fun LiquidBottomTabs(
                             if (hasDragged) {
                                 val frameDragAmount = currentPosition - previousPosition
                                 previousPosition = currentPosition
-                                dampedDragAnimation.onDrag(size, frameDragAmount)
+                                dampedDragAnimation.onDrag(containerSize, frameDragAmount)
                             }
                         }
 

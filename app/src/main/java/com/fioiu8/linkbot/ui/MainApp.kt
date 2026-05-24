@@ -1,7 +1,6 @@
 package com.fioiu8.linkbot.ui
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -95,8 +94,7 @@ fun MainApp(
                 ) {
                     Icon(
                         imageVector = pageIcons[index],
-                        contentDescription = pageTitles[index],
-                        modifier = Modifier
+                        contentDescription = pageTitles[index]
                     )
                 }
             }
@@ -112,15 +110,8 @@ fun MainApp(
                     NavigationBarItem(
                         selected = selectedTab == index,
                         onClick = { settingsViewModel.selectTab(index) },
-                        icon = {
-                            Icon(
-                                imageVector = pageIcons[index],
-                                contentDescription = label
-                            )
-                        },
-                        label = {
-                            Text(text = label)
-                        }
+                        icon = pageIcons[index],
+                        label = label
                     )
                 }
             }
