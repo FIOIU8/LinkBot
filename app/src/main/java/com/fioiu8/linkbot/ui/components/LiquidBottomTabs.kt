@@ -13,7 +13,6 @@ import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
@@ -133,7 +132,7 @@ fun LiquidBottomTabs(
                         )
                     }
                 },
-                onDrag = { _, dragAmount ->
+                onDrag = { size, dragAmount ->
                     updateValue(
                         (targetValue + dragAmount.x / tabWidth * if (isLtr) 1f else -1f)
                             .fastCoerceIn(0f, (tabsCount - 1).toFloat())
@@ -207,11 +206,7 @@ fun LiquidBottomTabs(
 
                         var previousPosition = down.position
 
-                        val isUp = {
-                            currentEvent.changes.any { it.pressed }
-                        }
-
-                        while (isUp()) {
+                        do {
                             val event = awaitPointerEvent()
                             val change = event.changes.firstOrNull() ?: break
 
@@ -227,9 +222,10 @@ fun LiquidBottomTabs(
                             if (hasDragged) {
                                 val frameDragAmount = currentPosition - previousPosition
                                 previousPosition = currentPosition
-                                dampedDragAnimation.onDrag(containerSize, frameDragAmount)
+                                val size = IntSize(width, height)
+                                dampedDragAnimation.onDrag.invoke(size, frameDragAmount)
                             }
-                        }
+                        } while (down.changedToUp().not())
 
                         dampedDragAnimation.release()
 
