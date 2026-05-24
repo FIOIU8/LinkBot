@@ -240,10 +240,6 @@ fun LiquidBottomTabs(
                             val clampedIndex = tappedIndex.fastCoerceIn(0, tabsCount - 1)
                             if (clampedIndex != currentIndex) {
                                 currentIndex = clampedIndex
-                                dampedDragAnimation.snapToValue(clampedIndex.toFloat())
-                                animationScope.launch {
-                                    offsetAnimation.snapTo(0f)
-                                }
                                 onTabSelected(clampedIndex)
                             }
                             dampedDragAnimation.release()

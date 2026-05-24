@@ -30,22 +30,10 @@ import top.yukonga.miuix.kmp.utils.*
 import java.text.SimpleDateFormat
 import java.util.*
 
-/**
- * 关于页面 - 展示应用信息和系统设置入口
- *
- * 职责：
- * - 显示应用版本信息
- * - 显示构建信息
- * - 提供系统设置入口
- * - 支持应用介绍和版权信息展示
- *
- * @param settingsViewModel SettingsViewModel 实例
- */
 @Composable
 fun AboutScreen(settingsViewModel: SettingsViewModel) {
     val context = LocalContext.current
 
-    // 获取应用信息（版本号、构建日期等）
     val appInfo = remember {
         try {
             val packageInfo = context.packageManager.getPackageInfo(context.packageName, 0)
@@ -172,7 +160,7 @@ fun AboutScreen(settingsViewModel: SettingsViewModel) {
                         VersionInfoRow("构建版本", "${appInfo.buildDate}.${appInfo.buildNumber}")
                         VersionInfoRow(
                             "最低支持",
-                            "Android ${getAndroidVersionName(Build.VERSION_CODES.S)} (API ${Build.VERSION_CODES.S})"
+                            "Android 12 (API 31)"
                         )
                         VersionInfoRow(
                             "目标版本",
@@ -367,59 +355,33 @@ fun AboutScreen(settingsViewModel: SettingsViewModel) {
         }
     }
 
-    AnimatedVisibility(
-        visible = showClearDialog,
-        enter = fadeIn(animationSpec = tween(300)) +
-                    scaleIn(initialScale = 0.95f, animationSpec = tween(300)),
-        exit = fadeOut(animationSpec = tween(300)) +
-                scaleOut(targetScale = 0.95f, animationSpec = tween(300))
+    OverlayDialog(
+        title = "确定要清除所有数据吗？",
+        show = showClearDialog,
+        onDismissRequest = { showClearDialog = false }
     ) {
-        OverlayDialog(
-            onDismissRequest = { showClearDialog = false },
-            overlayColor = MiuixTheme.colorScheme.scrim,
-            isCancelable = true,
-            isVerticalScrim = false
-        ) {
-            AlertDialog(
-                onDismissRequest = { showClearDialog = false },
-                icon = {
-                    Icon(
-                        imageVector = MiuixIcons.Warning,
-                        contentDescription = null,
-                        tint = MiuixTheme.colorScheme.error
-                    )
-                },
-                title = {
-                    Text(
-                        "确定要清除所有数据吗？",
-                        fontWeight = FontWeight.Bold
-                    )
-                },
-                description = {
-                    Text(
-                        "这将删除所有聊天记录、笔记和设置数据。此操作不可撤销。",
-                        color = MiuixTheme.colorScheme.onSurfaceVariantSummary
-                    )
-                },
-                confirmButton = {
-                    TextButton(
-                        onClick = {
-                            settingsViewModel.clearAllData()
-                            showClearDialog = false
-                        },
-                        colors = ButtonDefaults.textButtonColors(
-                            contentColor = MiuixTheme.colorScheme.error
-                        )
-                    ) {
-                        Text("确认删除")
-                    }
-                },
-                dismissButton = {
-                    TextButton(onClick = { showClearDialog = false }) {
-                        Text("取消")
-                    }
-                }
+        Column(modifier = Modifier.padding(16.dp)) {
+            Text(
+                "这将删除所有聊天记录、笔记和设置数据。此操作不可撤销。",
+                color = MiuixTheme.colorScheme.onSurfaceVariantSummary
             )
+            Spacer(Modifier.height(16.dp))
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.End
+            ) {
+                TextButton(onClick = { showClearDialog = false }) {
+                    Text("取消")
+                }
+                Spacer(Modifier.width(8.dp))
+                TextButton(
+                    onClick = {
+                        showClearDialog = false
+                    }
+                ) {
+                    Text("确认删除", color = MiuixTheme.colorScheme.error)
+                }
+            }
         }
     }
 }
