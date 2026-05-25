@@ -54,7 +54,7 @@ fun LiquidSlider(
     backdrop: Backdrop,
     modifier: Modifier = Modifier
 ) {
-    val isLightTheme = !MiuixTheme.colors.isDark
+    val isLightTheme = !MiuixTheme.colorScheme.isDark
     val accentColor =
         if (isLightTheme) Color(0xFF0088FF)
         else Color(0xFF0091FF)

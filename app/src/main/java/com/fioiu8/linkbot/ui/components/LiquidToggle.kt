@@ -51,7 +51,7 @@ fun LiquidToggle(
     backdrop: Backdrop,
     modifier: Modifier = Modifier
 ) {
-    val isLightTheme = !MiuixTheme.colors.isDark
+    val isLightTheme = !MiuixTheme.colorScheme.isDark
     val accentColor =
         if (isLightTheme) Color(0xFF34C759)
         else Color(0xFF30D158)

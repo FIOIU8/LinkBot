@@ -62,7 +62,7 @@ fun MarkdownText(
     contentAlignment: Alignment.Horizontal = Alignment.Start
 ) {
     // 根据主题模式设置颜色
-    val isDark = MiuixTheme.colors.isDark
+    val isDark = MiuixTheme.colorScheme.isDark
     val textColor = if (isDark) Color(0xFFE0E0E0) else Color(0xFF1A1A1A)
     val codeBg = if (isDark) Color(0xFF2D2D2D) else Color(0xFFF5F5F5)
     val quoteColor = if (isDark) Color(0xFF3A3A3A) else Color(0xFFF0F0F0)

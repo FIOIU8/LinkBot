@@ -155,7 +155,7 @@ fun AboutScreen(settingsViewModel: SettingsViewModel) {
 
                         VersionInfoRow("应用版本", appInfo.versionName)
                         VersionInfoRow("版本代号", "${appInfo.versionCode}")
-                        VersionInfoRow("构建版本", "${appInfo.buildDate}.${appInfo.buildNumber}")
+                        VersionInfoRow("构建日期", "2026年05月25日")
                         VersionInfoRow(
                             "最低支持",
                             "Android 12 (API 31)"

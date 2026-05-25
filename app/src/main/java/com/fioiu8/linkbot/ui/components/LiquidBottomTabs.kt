@@ -76,7 +76,7 @@ fun LiquidBottomTabs(
     modifier: Modifier = Modifier,
     content: @Composable RowScope.(index: Int) -> Unit
 ) {
-    val isLightTheme = !MiuixTheme.colors.isDark
+    val isLightTheme = !MiuixTheme.colorScheme.isDark
     val accentColor =
         if (isLightTheme) Color(0xFF0088FF)
         else Color(0xFF0091FF)
