@@ -71,8 +71,6 @@ fun AboutScreen(settingsViewModel: SettingsViewModel) {
         }
     }
 
-    var showClearDialog by remember { mutableStateOf(false) }
-
     Scaffold(
         topBar = {
             SmallTopAppBar(title = "关于")
@@ -237,96 +235,6 @@ fun AboutScreen(settingsViewModel: SettingsViewModel) {
 
             AnimatedVisibility(
                 visible = true,
-                enter = fadeIn(animationSpec = tween(300, delayMillis = 400)) +
-                        slideInVertically(
-                            initialOffsetY = { it / 8 },
-                            animationSpec = tween(300, delayMillis = 400)
-                        )
-            ) {
-                Surface(
-                    modifier = Modifier.fillMaxWidth(),
-                    shape = RoundedCornerShape(16.dp),
-                    color = MiuixTheme.colorScheme.surfaceContainer
-                ) {
-                    Column(modifier = Modifier.padding(8.dp)) {
-                        Surface(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .clickable { showClearDialog = true },
-                            color = MiuixTheme.colorScheme.surfaceContainer
-                        ) {
-                            Row(
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .padding(16.dp),
-                                horizontalArrangement = Arrangement.SpaceBetween,
-                                verticalAlignment = Alignment.CenterVertically
-                            ) {
-                                Column(modifier = Modifier.weight(1f)) {
-                                    Text(
-                                        "清除所有数据",
-                                        fontSize = 16.sp,
-                                        color = MiuixTheme.colorScheme.error
-                                    )
-                                    Text(
-                                        "清除聊天记录、笔记和设置",
-                                        fontSize = 13.sp,
-                                        color = MiuixTheme.colorScheme.onSurfaceVariantSummary
-                                    )
-                                }
-                                Icon(
-                                    imageVector = MiuixIcons.Delete,
-                                    contentDescription = null,
-                                    tint = MiuixTheme.colorScheme.error,
-                                    modifier = Modifier.size(20.dp)
-                                )
-                            }
-                        }
-
-                        HorizontalDivider(
-                            modifier = Modifier.padding(horizontal = 16.dp),
-                            color = MiuixTheme.colorScheme.dividerLine
-                        )
-
-                        Surface(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .clickable { /* TODO: 重置设置 */ },
-                            color = MiuixTheme.colorScheme.surfaceContainer
-                        ) {
-                            Row(
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .padding(16.dp),
-                                horizontalArrangement = Arrangement.SpaceBetween,
-                                verticalAlignment = Alignment.CenterVertically
-                            ) {
-                                Column(modifier = Modifier.weight(1f)) {
-                                    Text(
-                                        "重置所有设置",
-                                        fontSize = 16.sp,
-                                        color = MiuixTheme.colorScheme.onSurface
-                                    )
-                                    Text(
-                                        "恢复默认设置，保留对话数据",
-                                        fontSize = 13.sp,
-                                        color = MiuixTheme.colorScheme.onSurfaceVariantSummary
-                                    )
-                                }
-                                Icon(
-                                    imageVector = MiuixIcons.Refresh,
-                                    contentDescription = null,
-                                    tint = MiuixTheme.colorScheme.onSurfaceVariantActions,
-                                    modifier = Modifier.size(20.dp)
-                                )
-                            }
-                        }
-                    }
-                }
-            }
-
-            AnimatedVisibility(
-                visible = true,
                 enter = fadeIn(animationSpec = tween(600, delayMillis = 600))
             ) {
                 Column(
@@ -352,32 +260,6 @@ fun AboutScreen(settingsViewModel: SettingsViewModel) {
             }
 
             Spacer(modifier = Modifier.height(32.dp))
-        }
-    }
-
-    OverlayDialog(
-        title = "确定要清除所有数据吗？",
-        show = showClearDialog,
-        onDismissRequest = { showClearDialog = false }
-    ) {
-        Column(modifier = Modifier.padding(16.dp)) {
-            Text(
-                "这将删除所有聊天记录、笔记和设置数据。此操作不可撤销。",
-                color = MiuixTheme.colorScheme.onSurfaceVariantSummary
-            )
-            Spacer(Modifier.height(16.dp))
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.End
-            ) {
-                TextButton(text = "取消", onClick = { showClearDialog = false })
-                Spacer(Modifier.width(8.dp))
-                Button(onClick = {
-                    showClearDialog = false
-                }) {
-                    Text("确认删除", color = MiuixTheme.colorScheme.error)
-                }
-            }
         }
     }
 }
