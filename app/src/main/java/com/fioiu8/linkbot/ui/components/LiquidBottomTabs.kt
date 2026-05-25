@@ -5,7 +5,6 @@ import androidx.compose.animation.core.EaseOut
 import androidx.compose.animation.core.spring
 import androidx.compose.foundation.gestures.awaitEachGesture
 import androidx.compose.foundation.gestures.awaitFirstDown
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Row
@@ -45,6 +44,7 @@ import androidx.compose.ui.util.fastRoundToInt
 import androidx.compose.ui.util.lerp
 import com.fioiu8.linkbot.ui.components.utils.DampedDragAnimation
 import com.fioiu8.linkbot.ui.components.utils.InteractiveHighlight
+import top.yukonga.miuix.kmp.theme.MiuixTheme
 import com.kyant.backdrop.Backdrop
 import com.kyant.backdrop.backdrops.layerBackdrop
 import com.kyant.backdrop.backdrops.rememberCombinedBackdrop
@@ -76,7 +76,7 @@ fun LiquidBottomTabs(
     modifier: Modifier = Modifier,
     content: @Composable RowScope.(index: Int) -> Unit
 ) {
-    val isLightTheme = !isSystemInDarkTheme()
+    val isLightTheme = !MiuixTheme.colors.isDark
     val accentColor =
         if (isLightTheme) Color(0xFF0088FF)
         else Color(0xFF0091FF)

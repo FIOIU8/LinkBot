@@ -2,7 +2,6 @@ package com.fioiu8.linkbot.ui.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.detectTapGestures
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -44,6 +43,7 @@ import com.kyant.backdrop.shadow.InnerShadow
 import com.kyant.backdrop.shadow.Shadow
 import com.kyant.shapes.Capsule
 import kotlinx.coroutines.flow.collectLatest
+import top.yukonga.miuix.kmp.theme.MiuixTheme
 
 @Composable
 fun LiquidSlider(
@@ -54,7 +54,7 @@ fun LiquidSlider(
     backdrop: Backdrop,
     modifier: Modifier = Modifier
 ) {
-    val isLightTheme = !isSystemInDarkTheme()
+    val isLightTheme = !MiuixTheme.colors.isDark
     val accentColor =
         if (isLightTheme) Color(0xFF0088FF)
         else Color(0xFF0091FF)

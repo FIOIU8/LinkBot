@@ -1,6 +1,5 @@
 package com.fioiu8.linkbot.ui.components
 
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.size
 import androidx.compose.runtime.Composable
@@ -43,6 +42,7 @@ import com.kyant.backdrop.shadow.InnerShadow
 import com.kyant.backdrop.shadow.Shadow
 import com.kyant.shapes.Capsule
 import kotlinx.coroutines.flow.collectLatest
+import top.yukonga.miuix.kmp.theme.MiuixTheme
 
 @Composable
 fun LiquidToggle(
@@ -51,7 +51,7 @@ fun LiquidToggle(
     backdrop: Backdrop,
     modifier: Modifier = Modifier
 ) {
-    val isLightTheme = !isSystemInDarkTheme()
+    val isLightTheme = !MiuixTheme.colors.isDark
     val accentColor =
         if (isLightTheme) Color(0xFF34C759)
         else Color(0xFF30D158)

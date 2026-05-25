@@ -33,6 +33,7 @@ import top.yukonga.miuix.kmp.basic.IconButton
 import top.yukonga.miuix.kmp.icon.MiuixIcons
 import top.yukonga.miuix.kmp.icon.extended.Copy
 import top.yukonga.miuix.kmp.basic.Icon
+import top.yukonga.miuix.kmp.theme.MiuixTheme
 import androidx.compose.foundation.BorderStroke
 
 /**
@@ -61,7 +62,7 @@ fun MarkdownText(
     contentAlignment: Alignment.Horizontal = Alignment.Start
 ) {
     // 根据主题模式设置颜色
-    val isDark = androidx.compose.foundation.isSystemInDarkTheme()
+    val isDark = MiuixTheme.colors.isDark
     val textColor = if (isDark) Color(0xFFE0E0E0) else Color(0xFF1A1A1A)
     val codeBg = if (isDark) Color(0xFF2D2D2D) else Color(0xFFF5F5F5)
     val quoteColor = if (isDark) Color(0xFF3A3A3A) else Color(0xFFF0F0F0)
