@@ -221,33 +221,25 @@ import java.io.File
                 }
             }
 
-            Surface(
-                modifier = Modifier
-                    .align(Alignment.BottomCenter)
-                    .fillMaxWidth()
-                    .padding(horizontal = 16.dp, vertical = 8.dp),
-                shape = RoundedCornerShape(20.dp),
-                shadowElevation = 8.dp
-            ) {
-                InputBar(
-                    inputText = inputText,
-                    isLoading = isLoading,
-                    onTextChange = { inputText = it },
-                    onSend = {
-                        if (inputText.isNotBlank()) {
-                            val idx = editingIndex
-                            if (idx != null) {
-                                viewModel.replaceAndResend(idx, inputText)
-                                editingIndex = null
-                            } else {
-                                viewModel.sendMessage(inputText)
-                            }
-                            inputText = ""
+            InputBar(
+                inputText = inputText,
+                isLoading = isLoading,
+                onTextChange = { inputText = it },
+                onSend = {
+                    if (inputText.isNotBlank()) {
+                        val idx = editingIndex
+                        if (idx != null) {
+                            viewModel.replaceAndResend(idx, inputText)
+                            editingIndex = null
+                        } else {
+                            viewModel.sendMessage(inputText)
                         }
-                    },
-                    isEditing = editingIndex != null
-                )
-            }
+                        inputText = ""
+                    }
+                },
+                isEditing = editingIndex != null,
+                modifier = Modifier.align(Alignment.BottomCenter)
+            )
         }
 
         val balance by viewModel.balance.collectAsState()
@@ -546,35 +538,35 @@ fun InputBar(
     isEditing: Boolean,
     modifier: Modifier = Modifier
 ) {
-    Row(
-        modifier = modifier
-            .fillMaxWidth()
-            .padding(horizontal = 16.dp, vertical = 8.dp),
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        if (isEditing) {
-            IconButton(onClick = onSend, modifier = Modifier.size(40.dp)) {
-                Icon(MiuixIcons.Close, "取消编辑", tint = MiuixTheme.colorScheme.error)
+    Surface(modifier = modifier.fillMaxWidth(), color = MiuixTheme.colorScheme.surface) {
+        Row(
+            modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            if (isEditing) {
+                IconButton(onClick = onSend, modifier = Modifier.size(40.dp)) {
+                    Icon(MiuixIcons.Close, "取消编辑", tint = MiuixTheme.colorScheme.error)
+                }
             }
-        }
 
-        TextField(
-            value = inputText,
-            onValueChange = onTextChange,
-            modifier = Modifier.weight(1f),
-            label = "输入消息...",
-            useLabelAsPlaceholder = true,
-            enabled = !isLoading,
-            trailingIcon = null
-        )
-        
-        Spacer(Modifier.width(8.dp))
-        
-        IconButton(onClick = onSend, enabled = inputText.isNotBlank() && !isLoading) {
-            if (isLoading) {
-                CircularProgressIndicator(modifier = Modifier.size(20.dp), strokeWidth = 2.dp)
-            } else {
-                Icon(MiuixIcons.Send, "发送", tint = if (inputText.isNotBlank()) MiuixTheme.colorScheme.primary else MiuixTheme.colorScheme.onSurfaceVariantSummary)
+            TextField(
+                value = inputText,
+                onValueChange = onTextChange,
+                modifier = Modifier.weight(1f),
+                label = "输入消息...",
+                useLabelAsPlaceholder = true,
+                enabled = !isLoading,
+                trailingIcon = null
+            )
+            
+            Spacer(Modifier.width(8.dp))
+            
+            IconButton(onClick = onSend, enabled = inputText.isNotBlank() && !isLoading) {
+                if (isLoading) {
+                    CircularProgressIndicator(modifier = Modifier.size(20.dp), strokeWidth = 2.dp)
+                } else {
+                    Icon(MiuixIcons.Send, "发送", tint = if (inputText.isNotBlank()) MiuixTheme.colorScheme.primary else MiuixTheme.colorScheme.onSurfaceVariantSummary)
+                }
             }
         }
     }
