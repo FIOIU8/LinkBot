@@ -133,6 +133,7 @@ import java.io.File
             modifier = Modifier
                 .fillMaxSize()
                 .padding(innerPadding)
+                .padding(bottom = 96.dp)
         ) {
             if (messages.isEmpty() && !isLoading) {
                 Box(
@@ -157,7 +158,7 @@ import java.io.File
                     verticalArrangement = Arrangement.spacedBy(8.dp),
                     contentPadding = PaddingValues(
                         top = 8.dp,
-                        bottom = 80.dp,
+                        bottom = 16.dp,
                         start = 16.dp,
                         end = 16.dp
                     )
@@ -220,25 +221,33 @@ import java.io.File
                 }
             }
 
-            InputBar(
-                inputText = inputText,
-                isLoading = isLoading,
-                onTextChange = { inputText = it },
-                onSend = {
-                    if (inputText.isNotBlank()) {
-                        val idx = editingIndex
-                        if (idx != null) {
-                            viewModel.replaceAndResend(idx, inputText)
-                            editingIndex = null
-                        } else {
-                            viewModel.sendMessage(inputText)
+            Surface(
+                modifier = Modifier
+                    .align(Alignment.BottomCenter)
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp, vertical = 8.dp),
+                shape = RoundedCornerShape(20.dp),
+                shadowElevation = 8.dp
+            ) {
+                InputBar(
+                    inputText = inputText,
+                    isLoading = isLoading,
+                    onTextChange = { inputText = it },
+                    onSend = {
+                        if (inputText.isNotBlank()) {
+                            val idx = editingIndex
+                            if (idx != null) {
+                                viewModel.replaceAndResend(idx, inputText)
+                                editingIndex = null
+                            } else {
+                                viewModel.sendMessage(inputText)
+                            }
+                            inputText = ""
                         }
-                        inputText = ""
-                    }
-                },
-                isEditing = editingIndex != null,
-                modifier = Modifier.align(Alignment.BottomCenter)
-            )
+                    },
+                    isEditing = editingIndex != null
+                )
+            }
         }
 
         val balance by viewModel.balance.collectAsState()
@@ -537,35 +546,35 @@ fun InputBar(
     isEditing: Boolean,
     modifier: Modifier = Modifier
 ) {
-    Surface(modifier = modifier.fillMaxWidth(), color = MiuixTheme.colorScheme.surface) {
-        Row(
-            modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            if (isEditing) {
-                IconButton(onClick = onSend, modifier = Modifier.size(40.dp)) {
-                    Icon(MiuixIcons.Close, "取消编辑", tint = MiuixTheme.colorScheme.error)
-                }
+    Row(
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(horizontal = 16.dp, vertical = 8.dp),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        if (isEditing) {
+            IconButton(onClick = onSend, modifier = Modifier.size(40.dp)) {
+                Icon(MiuixIcons.Close, "取消编辑", tint = MiuixTheme.colorScheme.error)
             }
+        }
 
-            TextField(
-                value = inputText,
-                onValueChange = onTextChange,
-                modifier = Modifier.weight(1f),
-                label = "输入消息...",
-                useLabelAsPlaceholder = true,
-                enabled = !isLoading,
-                trailingIcon = null
-            )
-            
-            Spacer(Modifier.width(8.dp))
-            
-            IconButton(onClick = onSend, enabled = inputText.isNotBlank() && !isLoading) {
-                if (isLoading) {
-                    CircularProgressIndicator(modifier = Modifier.size(20.dp), strokeWidth = 2.dp)
-                } else {
-                    Icon(MiuixIcons.Send, "发送", tint = if (inputText.isNotBlank()) MiuixTheme.colorScheme.primary else MiuixTheme.colorScheme.onSurfaceVariantSummary)
-                }
+        TextField(
+            value = inputText,
+            onValueChange = onTextChange,
+            modifier = Modifier.weight(1f),
+            label = "输入消息...",
+            useLabelAsPlaceholder = true,
+            enabled = !isLoading,
+            trailingIcon = null
+        )
+        
+        Spacer(Modifier.width(8.dp))
+        
+        IconButton(onClick = onSend, enabled = inputText.isNotBlank() && !isLoading) {
+            if (isLoading) {
+                CircularProgressIndicator(modifier = Modifier.size(20.dp), strokeWidth = 2.dp)
+            } else {
+                Icon(MiuixIcons.Send, "发送", tint = if (inputText.isNotBlank()) MiuixTheme.colorScheme.primary else MiuixTheme.colorScheme.onSurfaceVariantSummary)
             }
         }
     }
