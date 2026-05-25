@@ -45,6 +45,7 @@ import androidx.compose.ui.util.lerp
 import com.fioiu8.linkbot.ui.components.utils.DampedDragAnimation
 import com.fioiu8.linkbot.ui.components.utils.InteractiveHighlight
 import top.yukonga.miuix.kmp.theme.MiuixTheme
+import top.yukonga.miuix.kmp.theme.ColorSchemeMode
 import com.kyant.backdrop.Backdrop
 import com.kyant.backdrop.backdrops.layerBackdrop
 import com.kyant.backdrop.backdrops.rememberCombinedBackdrop
@@ -76,7 +77,18 @@ fun LiquidBottomTabs(
     modifier: Modifier = Modifier,
     content: @Composable RowScope.(index: Int) -> Unit
 ) {
-    val isLightTheme = !MiuixTheme.colorScheme.isDark
+    /**
+     * 检测当前是否为浅色主题
+     * 
+     * 使用 MiuixTheme.colorSchemeMode 获取当前主题模式，
+     * 当模式为 System/MonetSystem 时使用 MiuixTheme.colorScheme.isDark 获取系统实际深色状态
+     */
+    val isDark = when (MiuixTheme.colorSchemeMode) {
+        ColorSchemeMode.Dark, ColorSchemeMode.MonetDark -> true
+        ColorSchemeMode.System, ColorSchemeMode.MonetSystem -> MiuixTheme.colorScheme.isDark
+        else -> false
+    }
+    val isLightTheme = !isDark
     val accentColor =
         if (isLightTheme) Color(0xFF0088FF)
         else Color(0xFF0091FF)

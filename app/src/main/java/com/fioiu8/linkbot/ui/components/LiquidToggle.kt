@@ -43,6 +43,7 @@ import com.kyant.backdrop.shadow.Shadow
 import com.kyant.shapes.Capsule
 import kotlinx.coroutines.flow.collectLatest
 import top.yukonga.miuix.kmp.theme.MiuixTheme
+import top.yukonga.miuix.kmp.theme.ColorSchemeMode
 
 @Composable
 fun LiquidToggle(
@@ -51,7 +52,18 @@ fun LiquidToggle(
     backdrop: Backdrop,
     modifier: Modifier = Modifier
 ) {
-    val isLightTheme = !MiuixTheme.colorScheme.isDark
+    /**
+     * 检测当前是否为浅色主题
+     * 
+     * 使用 MiuixTheme.colorSchemeMode 获取当前主题模式，
+     * 当模式为 System/MonetSystem 时使用 MiuixTheme.colorScheme.isDark 获取系统实际深色状态
+     */
+    val isDark = when (MiuixTheme.colorSchemeMode) {
+        ColorSchemeMode.Dark, ColorSchemeMode.MonetDark -> true
+        ColorSchemeMode.System, ColorSchemeMode.MonetSystem -> MiuixTheme.colorScheme.isDark
+        else -> false
+    }
+    val isLightTheme = !isDark
     val accentColor =
         if (isLightTheme) Color(0xFF34C759)
         else Color(0xFF30D158)

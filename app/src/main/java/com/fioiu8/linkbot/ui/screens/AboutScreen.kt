@@ -155,7 +155,7 @@ fun AboutScreen(settingsViewModel: SettingsViewModel) {
 
                         VersionInfoRow("应用版本", appInfo.versionName)
                         VersionInfoRow("版本代号", "${appInfo.versionCode}")
-                        VersionInfoRow("构建日期", "2026年05月25日")
+                        VersionInfoRow("构建日期", formatBuildDate(appInfo.buildDate) + "|" + appInfo.buildNumber)
                         VersionInfoRow(
                             "最低支持",
                             "Android 12 (API 31)"
@@ -297,4 +297,15 @@ private fun VersionInfoRow(label: String, value: String) {
             modifier = Modifier.weight(1f, fill = false)
         )
     }
+}
+
+private fun formatBuildDate(buildDate: String): String {
+    val parts = buildDate.split(".")
+    if (parts.size >= 3) {
+        val year = parts[0]
+        val month = parts[1].padStart(2, '0')
+        val day = parts[2].padStart(2, '0')
+        return "${year}年${month}月${day}日"
+    }
+    return buildDate
 }
