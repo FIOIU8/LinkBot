@@ -1,6 +1,7 @@
 package com.fioiu8.linkbot.ui.components
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
@@ -63,7 +64,7 @@ fun LiquidSlider(
      */
     val isDark = when (MiuixTheme.colorSchemeMode) {
         ColorSchemeMode.Dark, ColorSchemeMode.MonetDark -> true
-        ColorSchemeMode.System, ColorSchemeMode.MonetSystem -> MiuixTheme.colorScheme.isDark
+        ColorSchemeMode.System, ColorSchemeMode.MonetSystem -> isSystemInDarkTheme()
         else -> false
     }
     val isLightTheme = !isDark

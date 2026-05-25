@@ -3,6 +3,7 @@ package com.fioiu8.linkbot.ui.components
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.EaseOut
 import androidx.compose.animation.core.spring
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.gestures.awaitEachGesture
 import androidx.compose.foundation.gestures.awaitFirstDown
 import androidx.compose.foundation.layout.Box
@@ -85,7 +86,7 @@ fun LiquidBottomTabs(
      */
     val isDark = when (MiuixTheme.colorSchemeMode) {
         ColorSchemeMode.Dark, ColorSchemeMode.MonetDark -> true
-        ColorSchemeMode.System, ColorSchemeMode.MonetSystem -> MiuixTheme.colorScheme.isDark
+        ColorSchemeMode.System, ColorSchemeMode.MonetSystem -> isSystemInDarkTheme()
         else -> false
     }
     val isLightTheme = !isDark
