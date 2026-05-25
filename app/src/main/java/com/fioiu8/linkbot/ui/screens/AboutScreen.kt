@@ -370,17 +370,11 @@ fun AboutScreen(settingsViewModel: SettingsViewModel) {
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.End
             ) {
-                TextButton(onClick = { showClearDialog = false }) {
-                    Text("取消")
-                }
+                TextButton(text = "取消", onClick = { showClearDialog = false })
                 Spacer(Modifier.width(8.dp))
-                TextButton(
-                    onClick = {
-                        showClearDialog = false
-                    }
-                ) {
-                    Text("确认删除", color = MiuixTheme.colorScheme.error)
-                }
+                TextButton(text = "确认删除", onClick = {
+                    showClearDialog = false
+                }, textColor = MiuixTheme.colorScheme.error)
             }
         }
     }
@@ -407,7 +401,7 @@ private fun VersionInfoRow(label: String, value: String) {
         Text(
             text = label,
             fontSize = 14.sp,
-            color = MiuixTheme.colorScheme.onSurfaceVariant
+            color = MiuixTheme.colorScheme.onSurfaceVariantSummary
         )
         Text(
             text = value,
