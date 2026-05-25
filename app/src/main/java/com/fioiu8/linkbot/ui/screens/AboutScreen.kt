@@ -372,9 +372,11 @@ fun AboutScreen(settingsViewModel: SettingsViewModel) {
             ) {
                 TextButton(text = "取消", onClick = { showClearDialog = false })
                 Spacer(Modifier.width(8.dp))
-                TextButton(text = "确认删除", onClick = {
+                Button(onClick = {
                     showClearDialog = false
-                }, textColor = MiuixTheme.colorScheme.error)
+                }) {
+                    Text("确认删除", color = MiuixTheme.colorScheme.error)
+                }
             }
         }
     }
