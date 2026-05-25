@@ -757,7 +757,7 @@ private fun ColorOption(
             contentAlignment = Alignment.Center
         ) {
             if (isSelected) {
-                Icon(MiuixIcons.Check, null, tint = Color.White, modifier = Modifier.size(24.dp))
+                Icon(MiuixIcons.Reply, null, tint = Color.White, modifier = Modifier.size(24.dp))
             }
         }
         Spacer(Modifier.height(4.dp))
