@@ -749,15 +749,15 @@ private fun ColorOption(
                 .size(48.dp)
                 .clip(CircleShape)
                 .background(color)
-                .clickable(onClick = onClick)
                 .then(
                     if (isSelected) Modifier.border(3.dp, MiuixTheme.colorScheme.primary, CircleShape)
                     else Modifier.border(1.dp, MiuixTheme.colorScheme.outline, CircleShape)
-                ),
+                )
+                .clickable(onClick = onClick),
             contentAlignment = Alignment.Center
         ) {
             if (isSelected) {
-                Icon(MiuixIcons.Refresh, null, tint = Color.White, modifier = Modifier.size(24.dp))
+                Icon(MiuixIcons.Check, null, tint = Color.White, modifier = Modifier.size(24.dp))
             }
         }
         Spacer(Modifier.height(4.dp))
