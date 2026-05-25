@@ -683,53 +683,47 @@ private fun ThemeColorPickerDialog(
     selectedColor: Color,
     onColorSelected: (Color) -> Unit
 ) {
-    AnimatedVisibility(
-        visible = visible,
-        enter = fadeIn(animationSpec = tween(300)) + scaleIn(initialScale = 0.95f, animationSpec = tween(300)),
-        exit = fadeOut(animationSpec = tween(300)) + scaleOut(targetScale = 0.95f, animationSpec = tween(300))
+    OverlayDialog(
+        title = "选择主题色",
+        show = visible,
+        onDismissRequest = onDismiss
     ) {
-        OverlayDialog(
-            title = "选择主题色",
-            show = visible,
-            onDismissRequest = onDismiss
-        ) {
-            Column(modifier = Modifier.padding(16.dp)) {
-                // 预设颜色列表
-                val presetColors = listOf(
-                    "默认蓝" to Color(0xFF2196F3),
-                    "珊瑚红" to Color(0xFFFF6B6B),
-                    "薄荷绿" to Color(0xFF4ECDC4),
-                    "阳光橙" to Color(0xFFFFA726),
-                    "优雅紫" to Color(0xFFAB47BC),
-                    "深海蓝" to Color(0xFF1565C0),
-                    "玫瑰金" to Color(0xFFE91E63),
-                    "森林绿" to Color(0xFF2E7D32),
-                    "暗夜灰" to Color(0xFF607D8B),
-                    "纯黑" to Color(0xFF212121)
-                )
+        Column(modifier = Modifier.padding(16.dp)) {
+            // 预设颜色列表
+            val presetColors = listOf(
+                "默认蓝" to Color(0xFF2196F3),
+                "珊瑚红" to Color(0xFFFF6B6B),
+                "薄荷绿" to Color(0xFF4ECDC4),
+                "阳光橙" to Color(0xFFFFA726),
+                "优雅紫" to Color(0xFFAB47BC),
+                "深海蓝" to Color(0xFF1565C0),
+                "玫瑰金" to Color(0xFFE91E63),
+                "森林绿" to Color(0xFF2E7D32),
+                "暗夜灰" to Color(0xFF607D8B),
+                "纯黑" to Color(0xFF212121)
+            )
 
-                // 按 5 列网格显示
-                presetColors.chunked(5).forEach { row ->
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.spacedBy(12.dp)
-                    ) {
-                        row.forEach { (name, color) ->
-                            ColorOption(
-                                name = name,
-                                color = color,
-                                isSelected = selectedColor == color,
-                                onClick = { onColorSelected(color) },
-                                modifier = Modifier.weight(1f)
-                            )
-                        }
-                        // 填充空白列
-                        repeat(5 - row.size) {
-                            Spacer(modifier = Modifier.weight(1f))
-                        }
+            // 按 5 列网格显示
+            presetColors.chunked(5).forEach { row ->
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.spacedBy(12.dp)
+                ) {
+                    row.forEach { (name, color) ->
+                        ColorOption(
+                            name = name,
+                            color = color,
+                            isSelected = selectedColor == color,
+                            onClick = { onColorSelected(color) },
+                            modifier = Modifier.weight(1f)
+                        )
                     }
-                    Spacer(Modifier.height(8.dp))
+                    // 填充空白列
+                    repeat(5 - row.size) {
+                        Spacer(modifier = Modifier.weight(1f))
+                    }
                 }
+                Spacer(Modifier.height(8.dp))
             }
         }
     }
