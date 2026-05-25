@@ -555,20 +555,18 @@ fun InputBar(
                 label = "输入消息...",
                 useLabelAsPlaceholder = true,
                 enabled = !isLoading,
-                trailingIcon = if (inputText.isNotBlank()) {
-                    {
-                        IconButton(onClick = onSend, enabled = !isLoading) {
-                            if (isLoading) {
-                                CircularProgressIndicator(modifier = Modifier.size(20.dp), strokeWidth = 2.dp)
-                            } else {
-                                Icon(MiuixIcons.Send, "发送", tint = MiuixTheme.colorScheme.primary)
-                            }
-                        }
-                    }
-                } else {
-                    null
-                }
+                trailingIcon = null
             )
+            
+            Spacer(Modifier.width(8.dp))
+            
+            IconButton(onClick = onSend, enabled = inputText.isNotBlank() && !isLoading) {
+                if (isLoading) {
+                    CircularProgressIndicator(modifier = Modifier.size(20.dp), strokeWidth = 2.dp)
+                } else {
+                    Icon(MiuixIcons.Send, "发送", tint = if (inputText.isNotBlank()) MiuixTheme.colorScheme.primary else MiuixTheme.colorScheme.onSurfaceVariantSummary)
+                }
+            }
         }
     }
 }
